@@ -1,0 +1,258 @@
+Sub CellnameChange()
+
+    
+    AllRowsCount = ActiveSheet.Rows.Count
+    
+    Column = 4 ''제품명 D열
+    
+    QuantityColumn = 6 ''제품수량 F열
+    
+    For Row = 2 To AllRowsCount
+    
+    SelectSize = ""
+    SelectCPBoolean = False
+    
+    Big_CP_count = 0
+    Big_Filter_count = 0
+    Big_Cover_count = 0
+    Big_Dispenser_count = 0
+    
+    
+    Small_CP_count = 0
+    Small_Filter_count = 0
+    Small_Black_Cover_count = 0
+    Small_Blue_Cover_count = 0
+    Small_Dispenser_count = 0
+    
+    AllQuantity = Cells(Row, QuantityColumn).Value
+    AllQuantity_array = Split(AllQuantity, "/")
+    AllText = Cells(Row, Column).Value
+    AllText_array = Split(AllText, "|")
+    
+    IndividualorderCount = 0
+    
+    For Each Text In AllText_array
+        
+        Quantity = AllQuantity_array(IndividualorderCount)
+        
+        ''[ 바로톡 F 확인 Check START ]
+        
+        If InStr(Text, "F") > 0 Then
+           SelectCPBoolean = True
+        End If
+            
+        ''[ 바로톡 F 확인 Check END ]
+        
+        
+        ''[ 사이즈 Check START ]
+        
+        If InStr(Text, "대형") > 0 Then
+            SelectSize = "대형"
+        ElseIf InStr(Text, "소형") > 0 Then
+            SelectSize = "소형"
+        End If
+            
+        ''[ 사이즈 Check END ]
+        
+            
+        ''[ 거름망 갯수 Check START ]
+        
+        FilterCount = 0
+        
+        '''''''"매"로 끝나는 거름망 갯수 검사
+        pointStr = "매"
+        TextArr = Split(Text)
+        For Each Item In TextArr
+            If InStr(Item, pointStr) > 0 Then
+                Item = Split(Item, pointStr)(0)
+                If IsNumeric(Item) Then
+                    FilterCount = Item
+                ElseIf InStr(Item, "거름망") > 0 Then
+                    FilterCount = Split(Item, "거름망")(1)
+                End If
+            End If
+        Next
+        
+        '''''''"P"로 끝나는 거름망 갯수 검사
+        
+        If FilterCount = 0 Then
+        
+        pointStr = "P"
+        TextArr = Split(Text)
+        For Each Item In TextArr
+            If InStr(Item, pointStr) > 0 Then
+                Item = Split(Item, pointStr)(0)
+                If IsNumeric(Item) Then
+                    FilterCount = Item
+                ElseIf InStr(Item, "거름망") > 0 Then
+                    FilterCount = Split(Item, "거름망")(1)
+                End If
+            End If
+        Next
+        
+        End If
+        
+        
+        '''''''"개월"로 끝나는 거름망 갯수 검사
+        
+        If FilterCount = 0 Then
+        
+            pointStr = "개월"
+            TextArr = Split(Text)
+            FilterMonth = 0
+            
+            TextArr = Split(Text)
+            For Each Item In TextArr
+                If InStr(Item, pointStr) > 0 Then
+                    Item = Split(Item, pointStr)(0)
+                    If IsNumeric(Item) Then
+                        FilterMonth = Item
+                    ElseIf InStr(Item, "형") > 0 Then
+                        FilterMonth = Split(Item, "형")(1)
+                    ElseIf InStr(Item, "SET") > 0 Then
+                        FilterMonth = Split(Item, "SET")(1)
+                    End If
+                End If
+            Next
+            
+            '''''''''''''''''''''''[ 바로톡 F 13개월 특별 세팅 START ]
+            If FilterMonth = 13 Then
+               If SelectSize = "대형" Then
+                    FilterCount = 6 * 30 + 10
+                    Big_Cover_count = Big_Cover_count + (2 * Quantity)
+                    Big_Dispenser_count = Big_Dispenser_count + (1 * Quantity)
+                ElseIf SelectSize = "소형" Then
+                    FilterCount = 6 * 35 + 10
+                    Small_Black_Cover_count = Small_Black_Cover_count + (1 * Quantity)
+                    Small_Blue_Cover_count = Small_Blue_Cover_count + (1 * Quantity)
+                    Small_Dispenser_count = Small_Dispenser_count + (1 * Quantity)
+                End If
+            '''''''''''''''''''''''[ 바로톡 F 13개월 특별 세팅 END ]
+            ElseIf SelectSize = "대형" Then
+                FilterCount = FilterMonth * 30 / 2
+            ElseIf SelectSize = "소형" Then
+                FilterCount = FilterMonth * 35 / 2
+            End If
+            
+        
+        End If
+        
+        
+        '''''''"거름망"만 적혀있는 품목 갯수 고정
+        
+        If FilterCount = 0 And InStr(Text, "거름망 대형") > 0 Then
+            FilterCount = 30
+        End If
+        If FilterCount = 0 And InStr(Text, "거름망 소형") > 0 Then
+            FilterCount = 35
+        End If
+        
+        
+        
+        '''''''''''''갯수 검사한 숫자 대형소형 구분하기
+        
+        If SelectSize = "대형" Then
+            If SelectCPBoolean Then
+                Big_CP_count = Big_CP_count + (FilterCount * Quantity)
+            Else
+                Big_Filter_count = Big_Filter_count + (FilterCount * Quantity)
+            End If
+            
+        ElseIf SelectSize = "소형" Then
+            If SelectCPBoolean Then
+                Small_CP_count = Small_CP_count + (FilterCount * Quantity)
+            Else
+                Small_Filter_count = Small_Filter_count + (FilterCount * Quantity)
+            End If
+        End If
+        
+        
+        ''[ 거름망 갯수 Check END ]
+        
+        
+        ''[ 거치대,디스펜서 Check START ]
+        
+        If InStr(Text, "홀인원") > 0 Then
+            Small_Black_Cover_count = Small_Black_Cover_count + (1 * Quantity)
+        ElseIf InStr(Text, "스마일") > 0 Then
+            Small_Blue_Cover_count = Small_Blue_Cover_count + (1 * Quantity)
+        ElseIf InStr(Text, "거치대") > 0 Then
+            Big_Cover_count = Big_Cover_count + (1 * Quantity)
+        End If
+            
+        If InStr(Text, "디스펜서") > 0 Or InStr(Text, "거름망케이스") > 0 Then
+            If SelectSize = "대형" Then
+                Big_Dispenser_count = Big_Dispenser_count + (1 * Quantity)
+            ElseIf SelectSize = "소형" Then
+                Small_Dispenser_count = Small_Dispenser_count + (1 * Quantity)
+            End If
+        End If
+        
+        ''[ 거치대,디스펜서 Check END ]
+        
+        IndividualorderCount = IndividualorderCount + 1
+    Next
+    
+    ''[ 결과 TEXT 출력 START ]
+
+    ''result = "[" & SizeStr & "] " & barotokFStr & "망 " & FilterCount & "P " & CoverStr & DispenserStr & vbCrLf & vbCrLf & " 원본 [ " & Text & " ]"
+    ''MsgBox result
+    
+    Big_text = "대형( "
+        If Big_CP_count > 0 Then
+            Big_text = Big_text & "초파리망" & Big_CP_count & "P "
+        End If
+        If Big_Filter_count > 0 Then
+            Big_text = Big_text & "망" & Big_Filter_count & "P "
+        End If
+        If Big_Cover_count > 0 Then
+            Big_text = Big_text & "커버" & Big_Cover_count & "개 "
+        End If
+        If Big_Dispenser_count > 0 Then
+            Big_text = Big_text & "디스펜서" & Big_Dispenser_count & "개 "
+        End If
+    Big_text = Big_text & " ) "
+    
+    Small_text = "소형( "
+        If Small_CP_count > 0 Then
+            Small_text = Small_text & "초파리망 " & Small_CP_count & "P "
+        End If
+        If Small_Filter_count > 0 Then
+            Small_text = Small_text & "망" & Small_Filter_count & "P "
+        End If
+        If Small_Black_Cover_count > 0 Then
+            Small_text = Small_text & " 검정커버" & Small_Black_Cover_count & "개 "
+        End If
+        If Small_Blue_Cover_count > 0 Then
+            Small_text = Small_text & " 파란커버" & Small_Blue_Cover_count & "개 "
+        End If
+        If Small_Dispenser_count > 0 Then
+            Small_text = Small_text & " 디스펜서" & Small_Dispenser_count & "개 "
+        End If
+    Small_text = Small_text & " ) "
+    
+    result = ""
+    
+        
+    If InStr(Big_text, "P") > 0 Or InStr(Big_text, "개") > 0 Then
+        result = result & Big_text
+    End If
+    
+    If InStr(Small_text, "P") > 0 Or InStr(Small_text, "개") > 0 Then
+        result = result & Small_text
+    End If
+    
+    result = result & vbCrLf & vbCrLf & " 원본 [ " & AllText & " ]"
+    
+    
+    ''[ 결과 TEXT 출력 END ]
+    
+    Cells(Row, Column).Value = result
+    
+    Next Row
+    
+
+
+
+End Sub
+
