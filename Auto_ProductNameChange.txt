@@ -1,7 +1,7 @@
 Sub CellnameChange()
 
     
-    AllRowsCount = ActiveSheet.Rows.Count
+    AllRowsCount = ActiveSheet.UsedRange.Rows.Count + ActiveSheet.UsedRange.Rows(1).Row - 1
     
     Column = 4 ''제품명 D열
     
