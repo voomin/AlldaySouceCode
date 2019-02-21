@@ -275,7 +275,12 @@ Sub CellnameChange()
     ''[ STYLE 설정 END ]
     Next Row
     
-
+    ''[ 합계 START ]
+    For i = 0 To PNALength
+        Cells(AllRowsCount + 1, Column + i).Formula = "=SUM(" & Range(Cells(2, Column + i), Cells(AllRowsCount, Column + i)).Address(False, False) & ")"
+    Next i
+    ''[ 합계 END ]
+    
 
 
 End Sub
@@ -288,3 +293,4 @@ Function zeroCheck(num)
     End If
     
 End Function
+
