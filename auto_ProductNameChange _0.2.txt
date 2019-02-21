@@ -1,4 +1,4 @@
-﻿Sub CellnameChange()
+Sub CellnameChange()
 
     
     AllRowsCount = ActiveSheet.UsedRange.Rows.Count + ActiveSheet.UsedRange.Rows(1).Row - 1
@@ -7,22 +7,24 @@
     
     QuantityColumn = 6 ''제품수량 F열
     
-    Dim ProductsNameArray(9) As String
+    Dim ProductsNameArray(11) As String
     
-    ProductsNameArray(0) = "대형 CP(30매)"
-    ProductsNameArray(1) = "대형 거름망(30매)"
-    ProductsNameArray(2) = "대형 디스펜서"
-    ProductsNameArray(3) = "대형 삐에로"
-    ProductsNameArray(4) = "소형 CP(35매)"
-    ProductsNameArray(5) = "소형 거름망(35매)"
-    ProductsNameArray(6) = "소형 디스펜서"
-    ProductsNameArray(7) = "소형 홀인원"
-    ProductsNameArray(8) = "소형 스마일"
+    ProductsNameArray(0) = "대형" & vbCrLf & "바로톡F" & vbCrLf & "13개월"
+    ProductsNameArray(1) = "대형" & vbCrLf & "바로톡F" & vbCrLf & "거름망(30매)"
+    ProductsNameArray(2) = "대형" & vbCrLf & "거름망(30매)"
+    ProductsNameArray(3) = "대형" & vbCrLf & "디스펜서"
+    ProductsNameArray(4) = "대형" & vbCrLf & "삐에로"
+    ProductsNameArray(5) = "소형" & vbCrLf & "바로톡F" & vbCrLf & "13개월"
+    ProductsNameArray(6) = "소형" & vbCrLf & "바로톡F" & vbCrLf & "거름망(35매)"
+    ProductsNameArray(7) = "소형" & vbCrLf & "거름망(35매)"
+    ProductsNameArray(8) = "소형" & vbCrLf & "디스펜서"
+    ProductsNameArray(9) = "소형" & vbCrLf & "홀인원"
+    ProductsNameArray(10) = "소형" & vbCrLf & "스마일"
     
     ''[ 열 증가시키기 START ]
     PNALength = UBound(ProductsNameArray) - LBound(ProductsNameArray)
     ''Columns(Column).Resize(, Column + PNALength).EntireColumn.Select
-    Columns("D:L").Insert
+    Columns("D:N").Insert
     QuantityColumn = QuantityColumn + PNALength
     For i = 0 To PNALength
         Cells(1, Column + i).Value = ProductsNameArray(i)
@@ -36,12 +38,14 @@
     SelectSize = ""
     SelectCPBoolean = False
     
+    Big_CP_13M_count = 0
     Big_CP_count = 0
     Big_filter_count = 0
     Big_Cover_count = 0
     Big_Dispenser_count = 0
     
     
+    Small_CP_13M_count = 0
     Small_CP_count = 0
     Small_Filter_count = 0
     Small_Black_Cover_count = 0
@@ -107,10 +111,10 @@
                     Item = Split(Item, pointStr)(0)
                     If IsNumeric(Item) Then
                         FilterCount = FilterCount * Item '''''''''거름망 갯수 * Ea
+                        Exit For
                     End If
                 End If
             Next
-        
         End If
         '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''(쿠팡 대처용)
         '''''''''''''''''''''[거름망 갯수가 존재하고 "Ea"단위가 붙어있을때 END ]
@@ -166,14 +170,16 @@
             '''''''''''''''''''''''[ 바로톡 F 13개월 특별 세팅 START ]
             If FilterMonth = 13 Then
                If SelectSize = "대형" Then
-                    FilterCount = 6 * 30 + 10
-                    Big_Cover_count = Big_Cover_count + (2 * Quantity)
-                    Big_Dispenser_count = Big_Dispenser_count + (1 * Quantity)
+                    Big_CP_13M_count = Big_CP_13M_count + (1 * Quantity)
+                    ''FilterCount = 6 * 30 + 10
+                    ''Big_Cover_count = Big_Cover_count + (2 * Quantity)
+                    ''Big_Dispenser_count = Big_Dispenser_count + (1 * Quantity)
                 ElseIf SelectSize = "소형" Then
-                    FilterCount = 6 * 35 + 10
-                    Small_Black_Cover_count = Small_Black_Cover_count + (1 * Quantity)
-                    Small_Blue_Cover_count = Small_Blue_Cover_count + (1 * Quantity)
-                    Small_Dispenser_count = Small_Dispenser_count + (1 * Quantity)
+                    Small_CP_13M_count = Small_CP_13M_count + (1 * Quantity)
+                    ''FilterCount = 6 * 35 + 10
+                    ''Small_Black_Cover_count = Small_Black_Cover_count + (1 * Quantity)
+                    ''Small_Blue_Cover_count = Small_Blue_Cover_count + (1 * Quantity)
+                    ''Small_Dispenser_count = Small_Dispenser_count + (1 * Quantity)
                 End If
             '''''''''''''''''''''''[ 바로톡 F 13개월 특별 세팅 END ]
             ElseIf SelectSize = "대형" Then
@@ -200,8 +206,6 @@
         
         '''''''''''''갯수 검사한 숫자 대형소형 구분하기
         
-        ''MsgBox Quantity & "= Quantity 값 확인"
-        
         If SelectSize = "대형" Then
             If SelectCPBoolean Then
                 Big_CP_count = Big_CP_count + (FilterCount * Quantity)
@@ -217,8 +221,6 @@
             End If
         End If
         
-        
-        ''MsgBox Big_filter_count & "= Big_filter_count 값 확인"
         
         ''[ 거름망 갯수 Check END ]
         
@@ -248,15 +250,18 @@
     
     ''[ 결과 TEXT 출력 START ]
     
-    Cells(Row, Column + 0).Value = zeroCheck(Big_CP_count / 30)
-    Cells(Row, Column + 1).Value = zeroCheck(Big_filter_count / 30)
-    Cells(Row, Column + 2).Value = zeroCheck(Big_Dispenser_count)
-    Cells(Row, Column + 3).Value = zeroCheck(Big_Cover_count)
-    Cells(Row, Column + 4).Value = zeroCheck(Small_CP_count / 35)
-    Cells(Row, Column + 5).Value = zeroCheck(Small_Filter_count / 35)
-    Cells(Row, Column + 6).Value = zeroCheck(Small_Dispenser_count)
-    Cells(Row, Column + 7).Value = zeroCheck(Small_Black_Cover_count)
-    Cells(Row, Column + 8).Value = zeroCheck(Small_Blue_Cover_count)
+    Cells(Row, Column + 0).Value = zeroCheck(Big_CP_13M_count)
+    Cells(Row, Column + 1).Value = zeroCheck(Big_CP_count / 30)
+    Cells(Row, Column + 2).Value = zeroCheck(Big_filter_count / 30)
+    Cells(Row, Column + 3).Value = zeroCheck(Big_Dispenser_count)
+    Cells(Row, Column + 4).Value = zeroCheck(Big_Cover_count)
+    
+    Cells(Row, Column + 5).Value = zeroCheck(Small_CP_13M_count)
+    Cells(Row, Column + 6).Value = zeroCheck(Small_CP_count / 35)
+    Cells(Row, Column + 7).Value = zeroCheck(Small_Filter_count / 35)
+    Cells(Row, Column + 8).Value = zeroCheck(Small_Dispenser_count)
+    Cells(Row, Column + 9).Value = zeroCheck(Small_Black_Cover_count)
+    Cells(Row, Column + 10).Value = zeroCheck(Small_Blue_Cover_count)
     
     ''[ 결과 TEXT 출력 END ]
     
@@ -283,6 +288,10 @@ Function zeroCheck(num)
     End If
     
 End Function
+
+
+
+
 
 
 
