@@ -57,11 +57,35 @@ Sub CellnameChange()
     AllText = Cells(Row, Column + PNALength).Value
     AllText_array = Split(AllText, "|")
     
+
+    ''[ TEXT 유효성 검사 START ]
+    TextArrayLength = UBound(AllText_array) - LBound(AllText_array)
+    QuantityArrayLength = UBound(AllQuantity_array) - LBound(AllQuantity_array)
+    If Not TextArrayLength = QuantityArrayLength Then
+        MsgBox "잘못된 형식입니다. Text = " & AllText & ", Row = " & Row
+        Exit For
+    End If
+    
+    ''[ TEXT 유효성 검사 END ]
+    
     IndividualorderCount = 0
     
     For Each Text In AllText_array
         
         Quantity = AllQuantity_array(IndividualorderCount)
+        
+        
+        ''[ 상품명 줄이기 START ]
+        
+        Text = Replace(Text, "자연분해성 싱크대", "")
+        Text = Replace(Text, "싱크대 일회용 거름통", "")
+        Text = Replace(Text, "★초파리 기피 성분 추가로 업그레이드★", "")
+        Text = Replace(Text, "[자연분해 싱크대 거름망] 바로톡", "")
+        Text = Replace(Text, "바로톡자연분해성 싱크대", "")
+        Text = Replace(Text, "없음", "")
+        
+        ''[ 상품명 줄이기 END ]
+        
         
         ''[ 바로톡 F 확인 Check START ]
         
@@ -269,18 +293,60 @@ Sub CellnameChange()
     
     If (Row Mod 2) = 1 Then
         Cells(Row, 1).EntireRow.Interior.Color = RGB(238, 238, 238)
+    Else
+        Cells(Row, 1).EntireRow.Interior.Color = RGB(255, 255, 255)
     End If
+    
+    Cells(Row, 1).EntireRow.Font.Size = 14
+    Cells(Row, 1).EntireRow.HorizontalAlignment = xlCenter
+    Cells(Row, 1).EntireRow.VerticalAlignment = xlCenter
     
     
     ''[ STYLE 설정 END ]
     Next Row
     
+    ''[ 열 삭제 START]
+    Columns(Column + PNALength + 0).Delete
+    Columns(Column + PNALength + 0).Delete
+    Columns(Column + PNALength + 0).Delete
+    Columns(Column + PNALength + 0).Delete
+    ''[ 열 삭제 END]
+    
+    
+    
     ''[ 합계 START ]
+    
+    '''''''''''''''''''''''''''''''[ Money '/'변환하여 합치기 START ]
+    For Row = 2 To AllRowsCount
+        Value = Cells(Row, Column + PNALength).Value
+        If InStr(Value, "/") > 0 Then
+           TotalMoney = 0
+           moneyArray = Split(Value, "/")
+           moneyArrayLength = UBound(moneyArray) - LBound(moneyArray) + 1
+           ''MsgBox moneyArrayLength & "=랭스, Row = " & Row
+           For i = 0 To moneyArrayLength - 1
+                ''MsgBox moneyArray(i) & "= money"
+                TotalMoney = TotalMoney + moneyArray(i)
+           Next i
+           
+           Cells(Row, Column + PNALength).Value = TotalMoney
+        End If
+    Next Row
+    '''''''''''''''''''''''''''''''[ Money '/'변환하여 합치기 END ]
+    
+    
+    Cells(1, 1).Value = "합계"
+    Rows(2).Insert
     For i = 0 To PNALength
-        Cells(AllRowsCount + 1, Column + i).Formula = "=SUM(" & Range(Cells(2, Column + i), Cells(AllRowsCount, Column + i)).Address(False, False) & ")"
+        Cells(2, Column + i).Formula = "=SUM(" & Range(Cells(3, Column + i), Cells(AllRowsCount + 1, Column + i)).Address(False, False) & ")"
     Next i
     ''[ 합계 END ]
     
+    
+    ''[ STYLE 설정 최종 START ]
+    Rows(1).Insert
+    Cells(1, 1).Formula = "=Today()"
+    ''[ STYLE 설정 최종 END ]
 
 
 End Sub
@@ -293,4 +359,8 @@ Function zeroCheck(num)
     End If
     
 End Function
+
+
+
+
 
