@@ -10,13 +10,13 @@ Sub CellnameChange()
     Dim ProductsNameArray(11) As String
     
     ProductsNameArray(0) = "대형" & vbCrLf & "바로톡F" & vbCrLf & "13개월"
-    ProductsNameArray(1) = "대형" & vbCrLf & "바로톡F" & vbCrLf & "거름망(30매)"
+    ProductsNameArray(1) = "대형" & vbCrLf & "바로톡F" & vbCrLf & "거름망" & vbCrLf & "(30매)"
     ProductsNameArray(2) = "대형" & vbCrLf & "거름망(30매)"
     ProductsNameArray(3) = "대형" & vbCrLf & "디스펜서"
     ProductsNameArray(4) = "대형" & vbCrLf & "삐에로"
     ProductsNameArray(5) = "소형" & vbCrLf & "바로톡F" & vbCrLf & "13개월"
-    ProductsNameArray(6) = "소형" & vbCrLf & "바로톡F" & vbCrLf & "거름망(35매)"
-    ProductsNameArray(7) = "소형" & vbCrLf & "거름망(35매)"
+    ProductsNameArray(6) = "소형" & vbCrLf & "바로톡F" & vbCrLf & "거름망" & vbCrLf & "(35매)"
+    ProductsNameArray(7) = "소형" & vbCrLf & "거름망" & vbCrLf & "(35매)"
     ProductsNameArray(8) = "소형" & vbCrLf & "디스펜서"
     ProductsNameArray(9) = "소형" & vbCrLf & "홀인원"
     ProductsNameArray(10) = "소형" & vbCrLf & "스마일"
@@ -335,7 +335,6 @@ Sub CellnameChange()
     '''''''''''''''''''''''''''''''[ Money '/'변환하여 합치기 END ]
     
     
-    Cells(1, 1).Value = "합계"
     Rows(2).Insert
     For i = 0 To PNALength
         Cells(2, Column + i).Formula = "=SUM(" & Range(Cells(3, Column + i), Cells(AllRowsCount + 1, Column + i)).Address(False, False) & ")"
@@ -359,6 +358,7 @@ Function zeroCheck(num)
     End If
     
 End Function
+
 
 
 
