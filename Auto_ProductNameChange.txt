@@ -121,6 +121,13 @@ Sub CellnameChange()
                     FilterCount = Item
                 ElseIf InStr(Item, "거름망") > 0 Then
                     FilterCount = Split(Item, "거름망")(1)
+                ElseIf InStr(Item, "+") > 0 Then
+                    TextArr2 = Split(Item, "+")
+                    For Each item2 In TextArr2
+                        If IsNumeric(item2) Then
+                            FilterCount = item2
+                        End If
+                    Next
                 End If
             End If
         Next
@@ -358,6 +365,8 @@ Function zeroCheck(num)
     End If
     
 End Function
+
+
 
 
 
