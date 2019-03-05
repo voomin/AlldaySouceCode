@@ -7,6 +7,8 @@ Sub CellnameChange()
     
     QuantityColumn = 6 ''제품수량 F열
     
+    PriceColumn = 8 ''판매가격 H열
+    
     Dim ProductsNameArray(11) As String
     
     ProductsNameArray(0) = "대형" & vbCrLf & "바로톡F" & vbCrLf & "13개월"
@@ -26,6 +28,7 @@ Sub CellnameChange()
     ''Columns(Column).Resize(, Column + PNALength).EntireColumn.Select
     Columns("D:N").Insert
     QuantityColumn = QuantityColumn + PNALength
+    PriceColumn = PriceColumn + PNALength
     For i = 0 To PNALength
         Cells(1, Column + i).Value = ProductsNameArray(i)
     Next i
@@ -52,11 +55,14 @@ Sub CellnameChange()
     Small_Blue_Cover_count = 0
     Small_Dispenser_count = 0
     
-    AllQuantity = Cells(Row, QuantityColumn).Value
-    AllQuantity_array = Split(AllQuantity, "/")
     AllText = Cells(Row, Column + PNALength).Value
     AllText_array = Split(AllText, "|")
     
+    AllQuantity = Cells(Row, QuantityColumn).Value
+    AllQuantity_array = Split(AllQuantity, "/")
+    
+    AllPrice = Cells(Row, PriceColumn).Value
+    AllPrice_array = Split(AllPrice, "/")
 
     ''[ TEXT 유효성 검사 START ]
     TextArrayLength = UBound(AllText_array) - LBound(AllText_array)
@@ -73,7 +79,7 @@ Sub CellnameChange()
     For Each Text In AllText_array
         
         Quantity = AllQuantity_array(IndividualorderCount)
-        
+        Price = AllPrice_array(IndividualorderCount)
         
         ''[ 상품명 줄이기 START ]
         
@@ -224,7 +230,7 @@ Sub CellnameChange()
         '''''''["개월"로 끝나는 거름망 갯수 검사 END ]
         
         
-        '''''''"거름망"만 적혀있는 품목 갯수 고정
+        '''''''[ "거름망"만 적혀있는 품목 갯수 고정START ]
         
         If FilterCount = 0 And InStr(Text, "거름망 대형") > 0 Then
             FilterCount = 30
@@ -232,7 +238,42 @@ Sub CellnameChange()
         If FilterCount = 0 And InStr(Text, "거름망 소형") > 0 Then
             FilterCount = 35
         End If
+        '''''''[ "거름망"만 적혀있는 품목 갯수 고정END ]
         
+        
+       
+        '''''''[ "1세트"들어가는 문구 거름망 파악하기 START ]
+        '''''''''''''''''''''''''''''''''''''''''(쿠팡 대처용)
+        
+        If FilterCount = 0 Then
+            If InStr(Text, "1세트") > 0 Then
+                
+                MsgBox "1세트가 발견되었습니다. 반드시 확인하여 주세요. Row = " & Row & ", price = " & Price
+                
+                Select Case Price
+                    Case 22380
+                        MsgBox "거름망 35매 3개 디스펜서 0개"
+                    Case 28380
+                        MsgBox "거름망 35매 3개 디스펜서 1개"
+                    Case 16580
+                        MsgBox "거름망 35매 2개 디스펜서 0개"
+                    Case 22580
+                        MsgBox "거름망 35매 2개 디스펜서 1개"
+                    Case 10780
+                        MsgBox "거름망 35매 1개 디스펜서 0개"
+                    Case 16780
+                        MsgBox "거름망 35매 1개 디스펜서 1개"
+                End Select
+                
+                
+                
+                
+            End If
+        
+        End If
+        
+        '''''''''''''''''''''''''''''''''''''''''(쿠팡 대처용)
+        '''''''[ "1세트"들어가는 문구 거름망 파악하기 END ]
         
         
         '''''''''''''갯수 검사한 숫자 대형소형 구분하기
@@ -365,6 +406,7 @@ Function zeroCheck(num)
     End If
     
 End Function
+
 
 
 
