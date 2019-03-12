@@ -1,0 +1,7 @@
+﻿Sub DeleteAllComments()
+'Updateby20140613
+For Each xWs In Application.ActiveWorkbook.Sheets
+    xWs.Columns(1).Delete
+    xWs.Rows("40:1048576").Delete
+Next
+End Sub
