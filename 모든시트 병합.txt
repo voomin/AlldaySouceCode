@@ -1,0 +1,17 @@
+﻿Sub SheetUnit()
+Dim i As Integer
+Dim shtA As Worksheet
+Dim rngB As Range
+
+Set shtA = Sheets(1)
+For i = 2 To Sheets.Count
+Set rngB = shtA.Cells(Rows.Count, 1).End(xlUp).Offset(1, 0)
+
+
+Sheets(i).UsedRange.Copy rngB
+Next i
+
+
+End Sub
+
+
