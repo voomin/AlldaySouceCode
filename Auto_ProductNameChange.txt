@@ -320,6 +320,23 @@ Sub CellnameChange()
         IndividualorderCount = IndividualorderCount + 1
     Next
     
+    '''''''[ "단일상품"들어가는 문구파악하기 START ]
+    '''''''''''''''''''''''''''''''''''''''''(쿠팡 대처용)
+
+    If FilterCount = 0 Then
+        If InStr(Text, "단일상품") > 0 Then
+            
+            ''6개월 리필 + 거치대 + 디스펜서 구성 상품
+            MsgBox "단일상품 문구가 발견되었습니다. 반드시 확인하여 주세요. Row = " & Row & ", price = " & Price
+            
+
+        End If
+
+    End If
+
+    '''''''''''''''''''''''''''''''''''''''''(쿠팡 대처용)
+    '''''''[ "단일상품"들어가는 문구파악하기 END ]
+    
     ''[ 결과 TEXT 출력 START ]
     
     Cells(Row, Column + 0).Value = zeroCheck(Big_CP_13M_count)
