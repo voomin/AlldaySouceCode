@@ -371,10 +371,10 @@ Sub CellnameChange()
     Next Row
     
     ''[ 열 삭제 START]
-    Columns(Column + PNALength + 0).Delete
-    Columns(Column + PNALength + 0).Delete
-    Columns(Column + PNALength + 0).Delete
-    Columns(Column + PNALength + 0).Delete
+    ''Columns(Column + PNALength + 0).Delete
+    ''Columns(Column + PNALength + 0).Delete
+    ''Columns(Column + PNALength + 0).Delete
+    ''Columns(Column + PNALength + 0).Delete
     ''[ 열 삭제 END]
     
     
