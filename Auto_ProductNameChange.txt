@@ -7,7 +7,7 @@ Sub CellnameChange()
     
     QuantityColumn = 6 ''제품수량 F열
     
-    PriceColumn = 8 ''판매가격 H열
+    PriceColumn = 7 ''판매가격 G열
     
     Dim ProductsNameArray(11) As String
     
@@ -63,7 +63,8 @@ Sub CellnameChange()
     
     AllPrice = Cells(Row, PriceColumn).Value
     AllPrice_array = Split(AllPrice, "/")
-
+    Price_total = 0
+    
     ''[ TEXT 유효성 검사 START ]
     TextArrayLength = UBound(AllText_array) - LBound(AllText_array)
     QuantityArrayLength = UBound(AllQuantity_array) - LBound(AllQuantity_array)
@@ -80,6 +81,8 @@ Sub CellnameChange()
         
         Quantity = AllQuantity_array(IndividualorderCount)
         Price = AllPrice_array(IndividualorderCount)
+        Price_total = Price_total + Price
+        
         
         ''[ 상품명 줄이기 START ]
         
@@ -352,6 +355,8 @@ Sub CellnameChange()
     Cells(Row, Column + 9).Value = zeroCheck(Small_Black_Cover_count)
     Cells(Row, Column + 10).Value = zeroCheck(Small_Blue_Cover_count)
     
+    Cells(Row, PriceColumn + PNALength).Value = Price_total
+    
     ''[ 결과 TEXT 출력 END ]
     
     ''[ STYLE 설정 START ]
@@ -369,49 +374,6 @@ Sub CellnameChange()
     
     ''[ STYLE 설정 END ]
     Next Row
-    
-    ''[ 열 삭제 START]
-    Columns(Column + PNALength + 0).Delete
-    Columns(Column + PNALength + 0).Delete
-    Columns(Column + PNALength + 0).Delete
-    Columns(Column + PNALength + 0).Delete
-    ''[ 열 삭제 END]
-    
-    
-    
-    ''[ 합계 START ]
-    
-    '''''''''''''''''''''''''''''''[ Money '/'변환하여 합치기 START ]
-    For Row = 2 To AllRowsCount
-        Value = Cells(Row, Column + PNALength).Value
-        If InStr(Value, "/") > 0 Then
-           TotalMoney = 0
-           moneyArray = Split(Value, "/")
-           moneyArrayLength = UBound(moneyArray) - LBound(moneyArray) + 1
-           ''MsgBox moneyArrayLength & "=랭스, Row = " & Row
-           For i = 0 To moneyArrayLength - 1
-                ''MsgBox moneyArray(i) & "= money"
-                TotalMoney = TotalMoney + moneyArray(i)
-           Next i
-           
-           Cells(Row, Column + PNALength).Value = TotalMoney
-        End If
-    Next Row
-    '''''''''''''''''''''''''''''''[ Money '/'변환하여 합치기 END ]
-    
-    
-    Rows(2).Insert
-    For i = 0 To PNALength
-        Cells(2, Column + i).Formula = "=SUM(" & Range(Cells(3, Column + i), Cells(AllRowsCount + 1, Column + i)).Address(False, False) & ")"
-    Next i
-    ''[ 합계 END ]
-    
-    
-    ''[ STYLE 설정 최종 START ]
-    Rows(1).Insert
-    Cells(1, 1).Formula = "=Today()"
-    ''[ STYLE 설정 최종 END ]
-
 
 End Sub
 
@@ -423,6 +385,8 @@ Function zeroCheck(num)
     End If
     
 End Function
+
+
 
 
 
