@@ -355,7 +355,24 @@ Sub CellnameChange()
     Cells(Row, Column + 9).Value = zeroCheck(Small_Black_Cover_count)
     Cells(Row, Column + 10).Value = zeroCheck(Small_Blue_Cover_count)
     
-    Cells(Row, PriceColumn + PNALength).Value = Price_total
+    Cells(Row, PriceColumn + PNALength - 1).Value = Price_total
+    
+    resultText = ""
+    
+    resultText = resultText & zeroCheckStr("F대형13개월", Big_CP_13M_count)
+    resultText = resultText & zeroCheckStr("CP대형30매", Big_CP_count / 30)
+    resultText = resultText & zeroCheckStr("일반대형30매", Big_filter_count / 30)
+    resultText = resultText & zeroCheckStr("대형디스펜서", Big_Dispenser_count)
+    resultText = resultText & zeroCheckStr("삐에로", Big_Cover_count)
+    
+    resultText = resultText & zeroCheckStr("F소형13개월", Small_CP_13M_count)
+    resultText = resultText & zeroCheckStr("CP소형35매", Small_CP_count / 35)
+    resultText = resultText & zeroCheckStr("일반소형35매", Small_Filter_count / 35)
+    resultText = resultText & zeroCheckStr("소형디스펜서", Small_Dispenser_count)
+    resultText = resultText & zeroCheckStr("홀인원", Small_Black_Cover_count)
+    resultText = resultText & zeroCheckStr("스마일", Small_Blue_Cover_count)
+    
+    Cells(Row, PriceColumn + PNALength).Value = resultText
     
     ''[ 결과 TEXT 출력 END ]
     
@@ -385,6 +402,15 @@ Function zeroCheck(num)
     End If
     
 End Function
+
+Function zeroCheckStr(str, num)
+    If num = 0 Then
+        zeroCheckStr = ""
+    Else
+        zeroCheckStr = "(" & str & ")" & num & "개 "
+    End If
+End Function
+
 
 
 
