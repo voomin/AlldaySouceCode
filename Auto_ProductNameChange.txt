@@ -5,9 +5,9 @@ Sub CellnameChange()
     
     Column = 4 ''제품명 D열
     
-    QuantityColumn = 6 ''제품수량 F열
+    QuantityColumn = 5 ''제품수량 E열
     
-    PriceColumn = 7 ''판매가격 G열
+    PriceColumn = 6 ''판매가격 F열
     
     Dim ProductsNameArray(11) As String
     
@@ -355,7 +355,7 @@ Sub CellnameChange()
     Cells(Row, Column + 9).Value = zeroCheck(Small_Black_Cover_count)
     Cells(Row, Column + 10).Value = zeroCheck(Small_Blue_Cover_count)
     
-    Cells(Row, PriceColumn + PNALength - 1).Value = Price_total
+    Cells(Row, PriceColumn + PNALength + 2).Value = Price_total
     
     resultText = ""
     
@@ -372,7 +372,7 @@ Sub CellnameChange()
     resultText = resultText & zeroCheckStr("홀인원", Small_Black_Cover_count)
     resultText = resultText & zeroCheckStr("스마일", Small_Blue_Cover_count)
     
-    Cells(Row, PriceColumn + PNALength).Value = resultText
+    Cells(Row, PriceColumn + PNALength + 3).Value = resultText
     
     ''[ 결과 TEXT 출력 END ]
     
@@ -410,6 +410,7 @@ Function zeroCheckStr(str, num)
         zeroCheckStr = "(" & str & ")" & num & "개 "
     End If
 End Function
+
 
 
 
