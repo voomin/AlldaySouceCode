@@ -1,5 +1,5 @@
-Sub CellnameChange()
 
+Sub CellnameChange()
     
     AllRowsCount = ActiveSheet.UsedRange.Rows.Count + ActiveSheet.UsedRange.Rows(1).Row - 1
     
@@ -278,6 +278,45 @@ Sub CellnameChange()
         '''''''''''''''''''''''''''''''''''''''''(쿠팡 대처용)
         '''''''[ "1세트"들어가는 문구 거름망 파악하기 END ]
         
+        '''''''[ "단일상품" Check START ]
+    
+        If FilterCount = 0 Then
+            If InStr(Text, "단일상품") > 0 Then
+                 Select Case Price
+                    Case 11880
+                        ''MsgBox "대형 2개월(거치대+거름망 30매)"
+                        FilterCount = 30
+                        Big_Cover_count = Big_Cover_count + (1 * Quantity)
+                    Case 16780
+                        ''MsgBox "대형 4개월(거치대+거름망 60매)"
+                        FilterCount = 60
+                        Big_Cover_count = Big_Cover_count + (1 * Quantity)
+                    Case 22680
+                        ''MsgBox "대형 6개월(거치대+거름망 90매)"
+                        FilterCount = 90
+                        Big_Cover_count = Big_Cover_count + (1 * Quantity)
+                    Case 17380
+                        ''MsgBox "대형 2개월(거치대+디스펜서+거름망 30매)"
+                        FilterCount = 30
+                        Big_Cover_count = Big_Cover_count + (1 * Quantity)
+                        Big_Dispenser_count = Big_Dispenser_count + (1 * Quantity)
+                    Case 23280
+                        ''MsgBox "대형 4개월(거치대+디스펜서+거름망 60매)"
+                        FilterCount = 60
+                        Big_Cover_count = Big_Cover_count + (1 * Quantity)
+                        Big_Dispenser_count = Big_Dispenser_count + (1 * Quantity)
+                    Case 29180
+                        ''MsgBox "대형 6개월(거치대+디스펜서+거름망 90매)"
+                        FilterCount = 90
+                        Big_Cover_count = Big_Cover_count + (1 * Quantity)
+                        Big_Dispenser_count = Big_Dispenser_count + (1 * Quantity)
+                    Case Else
+                        MsgBox Row & "행은 등록되지 않은 단일상품에 의하여 변환되지 않았습니다."
+                End Select
+            End If
+        End If
+        '''''''[ "단일상품" Check END ]
+        
         
         '''''''''''''갯수 검사한 숫자 대형소형 구분하기
         
@@ -322,23 +361,6 @@ Sub CellnameChange()
         
         IndividualorderCount = IndividualorderCount + 1
     Next
-    
-    '''''''[ "단일상품"들어가는 문구파악하기 START ]
-    '''''''''''''''''''''''''''''''''''''''''(쿠팡 대처용)
-
-    If FilterCount = 0 Then
-        If InStr(Text, "단일상품") > 0 Then
-            
-            ''6개월 리필 + 거치대 + 디스펜서 구성 상품
-            MsgBox "단일상품 문구가 발견되었습니다. 반드시 확인하여 주세요. Row = " & Row & ", price = " & Price
-            
-
-        End If
-
-    End If
-
-    '''''''''''''''''''''''''''''''''''''''''(쿠팡 대처용)
-    '''''''[ "단일상품"들어가는 문구파악하기 END ]
     
     ''[ 결과 TEXT 출력 START ]
     
@@ -410,6 +432,7 @@ Function zeroCheckStr(str, num)
         zeroCheckStr = "(" & str & ")" & num & "개 "
     End If
 End Function
+
 
 
 
