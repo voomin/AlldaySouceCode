@@ -85,7 +85,7 @@ Sub CellnameChange()
         
         
         ''[ 상품명 줄이기 START ]
-        
+        Text = Replace(Text, "대형 SET (거치대+디스펜서+거름망 구성) [자연분해 싱크대 거름망] 바로톡 대형 SET (거치대+디스펜서+거름망 구성)/", "")
         Text = Replace(Text, "자연분해성 싱크대", "")
         Text = Replace(Text, "싱크대 일회용 거름통", "")
         Text = Replace(Text, "★초파리 기피 성분 추가로 업그레이드★", "")
@@ -443,6 +443,7 @@ Function zeroCheckStr(str, num)
         zeroCheckStr = "(" & str & ")" & num & "개 "
     End If
 End Function
+
 
 
 
