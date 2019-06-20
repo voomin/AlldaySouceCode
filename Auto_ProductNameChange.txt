@@ -50,7 +50,7 @@ Sub CellnameChange()
     
     Small_OPP_count = 0
     Small_CP_count = 0
-    Small_Filter_count = 0
+    Small_filter_count = 0
     Small_Black_Cover_count = 0
     Small_Blue_Cover_count = 0
     Small_Dispenser_count = 0
@@ -205,8 +205,22 @@ Sub CellnameChange()
                 End If
             Next
             
+            '''''''''''''''''''''''[ 바로톡 12개월 특별 세팅 START ] 인터파크용
+            If FilterMonth = 12 And Price = 69900 Then
+               If SelectSize = "대형" Then
+                    Big_filter_count = Big_filter_count + ((30 * 6) * Quantity)
+                    Big_Cover_count = Big_Cover_count + (2 * Quantity)
+                    Big_Dispenser_count = Big_Dispenser_count + (1 * Quantity)
+                ElseIf SelectSize = "소형" Then
+                    Small_filter_count = Small_filter_count + ((35 * 6) * Quantity)
+                    Small_Black_Cover_count = Small_Black_Cover_count + (1 * Quantity)
+                    Small_Blue_Cover_count = Small_Blue_Cover_count + (1 * Quantity)
+                    Small_Dispenser_count = Small_Dispenser_count + (1 * Quantity)
+                End If
+            '''''''''''''''''''''''[ 바로톡 12개월 특별 세팅 END ] 인터파크용
+            
             '''''''''''''''''''''''[ 바로톡 F 13개월 특별 세팅 START ]
-            If FilterMonth = 13 Then
+            ElseIf FilterMonth = 13 And SelectCPBoolean Then
                If SelectSize = "대형" Then
                     Big_CP_count = Big_CP_count + ((30 * 6) * Quantity)
                     Big_OPP_count = Big_OPP_count + (1 * Quantity)
@@ -342,7 +356,7 @@ Sub CellnameChange()
             If SelectCPBoolean Then
                 Small_CP_count = Small_CP_count + (FilterCount * Quantity)
             Else
-                Small_Filter_count = Small_Filter_count + (FilterCount * Quantity)
+                Small_filter_count = Small_filter_count + (FilterCount * Quantity)
             End If
         End If
         
@@ -383,7 +397,7 @@ Sub CellnameChange()
     
     Cells(Row, Column + 5).Value = zeroCheck(Small_OPP_count)
     Cells(Row, Column + 6).Value = zeroCheck(Small_CP_count / 35)
-    Cells(Row, Column + 7).Value = zeroCheck(Small_Filter_count / 35)
+    Cells(Row, Column + 7).Value = zeroCheck(Small_filter_count / 35)
     Cells(Row, Column + 8).Value = zeroCheck(Small_Dispenser_count)
     Cells(Row, Column + 9).Value = zeroCheck(Small_Black_Cover_count)
     Cells(Row, Column + 10).Value = zeroCheck(Small_Blue_Cover_count)
@@ -400,7 +414,7 @@ Sub CellnameChange()
     
     resultText = resultText & zeroCheckStr("일반소형OPP", Small_OPP_count)
     resultText = resultText & zeroCheckStr("CP소형35매", Small_CP_count / 35)
-    resultText = resultText & zeroCheckStr("일반소형35매", Small_Filter_count / 35)
+    resultText = resultText & zeroCheckStr("일반소형35매", Small_filter_count / 35)
     resultText = resultText & zeroCheckStr("소형디스펜서", Small_Dispenser_count)
     resultText = resultText & zeroCheckStr("홀인원", Small_Black_Cover_count)
     resultText = resultText & zeroCheckStr("스마일", Small_Blue_Cover_count)
@@ -443,6 +457,7 @@ Function zeroCheckStr(str, num)
         zeroCheckStr = "(" & str & ")" & num & "개 "
     End If
 End Function
+
 
 
 
