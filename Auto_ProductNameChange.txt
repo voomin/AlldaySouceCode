@@ -206,7 +206,7 @@ Sub CellnameChange()
             Next
             
             '''''''''''''''''''''''[ 바로톡 12개월 특별 세팅 START ] 인터파크용
-            If FilterMonth = 12 And Price = 69900 Then
+            If FilterMonth = 12 And Price = 54900 Then
                If SelectSize = "대형" Then
                     Big_filter_count = Big_filter_count + ((30 * 6) * Quantity)
                     Big_Cover_count = Big_Cover_count + (2 * Quantity)
@@ -457,6 +457,7 @@ Function zeroCheckStr(str, num)
         zeroCheckStr = "(" & str & ")" & num & "개 "
     End If
 End Function
+
 
 
 
